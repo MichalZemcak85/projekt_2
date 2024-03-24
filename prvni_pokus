@@ -1,0 +1,83 @@
+"""
+projekt_2.py: druhý projekt do Engeto Online Python Akademie
+
+author: Michal Zemčák
+email: michal.zemcak@gmail.com
+discord: michal_79719
+"""
+
+class TicTacToe:
+    def __init__(self):
+        self.board = [" " for _ in range(9)]
+        self.current_player = "O"
+
+    def display_board(self):
+        print("-------------")
+        for i in range(0, 9, 3):
+            print(f"|{self.board[i]}|{self.board[i+1]}|{self.board[i+2]}|")
+            print("-------------")
+
+    def make_move(self, move):
+        if self.board[move] == " ":
+            self.board[move] = self.current_player
+            return True
+        else:
+            print("This position is already taken. Please choose another one.")
+            return False
+
+    def check_winner(self):
+        win_conditions = [
+            (0, 1, 2), (3, 4, 5), (6, 7, 8),  # Horizontal
+            (0, 3, 6), (1, 4, 7), (2, 5, 8),  # Vertical
+            (0, 4, 8), (2, 4, 6)              # Diagonal
+        ]
+        for condition in win_conditions:
+            if self.board[condition[0]] == self.board[condition[1]] == self.board[condition[2]] != " ":
+                return True
+        return False
+
+    def check_draw(self):
+        return " " not in self.board
+
+    def switch_player(self):
+        self.current_player = "X" if self.current_player == "O" else "O"
+
+    def play(self):
+        print("Welcome to Tic Tac Toe")
+        print("========================================")
+        print("GAME RULES:")
+        print("Each player can place one mark (or stone)")
+        print("per turn on the 3x3 grid. The WINNER is")
+        print("who succeeds in placing three of their")
+        print("marks in a:")
+        print("* horizontal,")
+        print("* vertical or")
+        print("* diagonal row")
+        print("========================================")
+        print("Let's start the game")
+        print("--------------------------------------------")
+        self.display_board()
+
+        while True:
+            try:
+                move = int(input(f"Player {self.current_player} | Please enter your move number: ")) - 1
+                if 0 <= move < 9:
+                    if self.make_move(move):
+                        self.display_board()
+                        if self.check_winner():
+                            print(f"Congratulations, the player {self.current_player} WON!")
+                            break
+                        elif self.check_draw():
+                            print("It's a DRAW!")
+                            break
+                        self.switch_player()
+                    else:
+                        continue
+                else:
+                    print("Invalid move. Please choose a number between 1 and 9.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
+if __name__ == "__main__":
+    game = TicTacToe()
+    game.play()
